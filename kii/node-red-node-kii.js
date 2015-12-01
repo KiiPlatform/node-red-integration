@@ -14,7 +14,6 @@ module.exports = function(RED) {
         this.thingType = config.thingType;
         var node = this;
         this.on("input", function(msg) {
-            // node.log("##### mqtt=" + JSON.stringify(mqtt));
             if (!msg.site) {
                 msg.site = node.site;
             }
@@ -74,17 +73,6 @@ module.exports = function(RED) {
                             msg.thingID = json.thingID;
                             msg.accessToken = json.accessToken;
                             msg.mqttEndpoint = json.mqttEndpoint;
-                            // context.global = {};
-                            // context.global.kii = {};
-                            // context.global.kii.site = msg.site;
-                            // context.global.kii.host = host;
-                            // context.global.kii.appID = msg.appID;
-                            // context.global.kii.appKey = msg.appKey;
-                            // context.global.kii.vendorThingID = msg.vendorThingID;
-                            // context.global.kii.thingType = msg.thingType;
-                            // context.global.kii.thingID = msg.thingID;
-                            // context.global.kii.accessToken = msg.accessToken;
-                            // context.global.kii.mqttEndpoint = msg.mqttEndpoint;
                             fs.writeFile(filename, JSON.stringify(msg));
                             node.send(msg);
                         });
@@ -93,40 +81,12 @@ module.exports = function(RED) {
                     request.end();
                 } else {
                     var json = JSON.parse(data);
-                    msg.thingID = json.thingID;
-                    msg.accessToken = json.accessToken;
-                    node.send(msg);
+                    node.send(json);
                 }
             });
         });
     }
     RED.nodes.registerType("kii-onboarding-thing", KiiOnboardingThing);
-    function KiiMqttReceiver(config) {
-        RED.nodes.createNode(this, config);
-        var node = this;
-        var client = null;
-        this.on("input", function(msg) {
-            node.log("###### 1=" + msg);
-            node.log("###### 2=" + JSON.stringify(msg));
-            var options = {
-                port: msg.mqttEndpoint.portTCP,
-                clientId: msg.mqttEndpoint.mqttTopic,
-                username: msg.mqttEndpoint.username,
-                password: msg.mqttEndpoint.password
-            };
-            client = mqtt.connect("tcp://" + msg.mqttEndpoint.host, options);
-            client.on('connect', function () {
-                node.log("##### mqtt connected!!");
-                client.subscribe(msg.mqttEndpoint.mqttTopic);
-            });
-            client.on('message', function (topic, message) {
-                node.log("##### received message!! msg=" + message);
-            });
-        });
-    }
-    RED.nodes.registerType("kii-mqtt-receiver", KiiMqttReceiver);
-}
-
     // "topic": "",
     // "payload": 1448935794216,
     // "_msgid": "8f392a58.70c6d8",
@@ -148,3 +108,27 @@ module.exports = function(RED) {
     //     "portSSL": 8883,
     //     "ttl": 2147483647
     // }
+    function KiiMqttReceiver(config) {
+        RED.nodes.createNode(this, config);
+        var node = this;
+        var client = null;
+        this.on("input", function(msg) {
+            var options = {
+                port: msg.mqttEndpoint.portTCP,
+                clientId: msg.mqttEndpoint.mqttTopic,
+                username: msg.mqttEndpoint.username,
+                password: msg.mqttEndpoint.password
+            };
+            client = mqtt.connect("tcp://" + msg.mqttEndpoint.host, options);
+            client.on('connect', function () {
+                node.log("##### mqtt connected!!");
+                client.subscribe(msg.mqttEndpoint.mqttTopic);
+            });
+            client.on('message', function (topic, message) {
+                node.log("##### received message!! msg=" + message);
+            });
+        });
+    }
+    RED.nodes.registerType("kii-mqtt-receiver", KiiMqttReceiver);
+}
+
