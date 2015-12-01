@@ -1,0 +1,36 @@
+<script type="text/javascript">
+    RED.nodes.registerType('kii-thing-onboard',{
+        category: 'kiiThing',
+        color: '#f2841e',
+        defaults: {
+            name: {value:"Kii Thing Onboard", required: true},
+            appID: {value: "", required: true},
+            appKey: {value: "", required: true}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "kii-thing-onboard.png",
+        label: function() {
+            return "KiiThing-onboard";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="kii-thing-onboard">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-appID"><i class="fa fa-cogs"></i> App ID</label>
+        <input type="text" id="node-input-appID" placeholder="Vendor Thing ID">
+    </div>
+    <div class="form-row">
+        <label for="node-input-appKey"><i class="fa fa-key"></i> App Key</label>
+        <input type="text" id="node-input-appKey" placeholder="Password">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="kii-thing-onboard">
+    <p>A node that onboards a Thing to Kii Cloud with the given appID.</p>
+</script>
