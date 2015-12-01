@@ -69,6 +69,7 @@ module.exports = function(RED) {
                             responseBody += chunk;
                         });
                         response.on('end',function() {
+                            node.log("##### onboarded res=" + responseBody);
                             var json = JSON.parse(responseBody);
                             msg.thingID = json.thingID;
                             msg.accessToken = json.accessToken;
@@ -126,6 +127,7 @@ module.exports = function(RED) {
             });
             client.on('message', function (topic, message) {
                 node.log("##### received message!! msg=" + message);
+                node.send(JSON.parse(message));
             });
         });
     }
