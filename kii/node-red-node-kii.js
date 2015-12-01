@@ -3,6 +3,28 @@ module.exports = function(RED) {
     var http = require("https");
     var fs = require("fs");
     var mqtt = require("mqtt");
+    // "topic": "",
+    // "payload": 1448935794216,
+    // "_msgid": "8f392a58.70c6d8",
+    // "site": "us",
+    // "appID": "5b8d7fc2",
+    // "appKey": "c6a72bcd9836399f943d3798c7f3719f",
+    // "vendorThingID": "1234-5678-abc-dei1",
+    // "thingPassword": "password",
+    // "thingType": "",
+    // "thingID": "th.bb149fa00022-d4ca-5e11-bc79-02dcef5f",
+    // "accessToken": "QDendRpcdhrm1aI62tOa1x66wLRjlrNxWDBtvToTbR4",
+    // "mqttEndpoint": {
+    //     "installationID": "v95ztbzvpfg0curba58pq6is8",
+    //     "username": "5b8d7fc2-NUjCgvNQE2vPLqwkcfm2Ghx",
+    //     "password": "RBEoyoINKyWeoJTTrrTtcyiINBVkMlVWrLVBHxKhQjgcgjJzeNcFuaCfxFIoaJRP",
+    //     "mqttTopic": "hJrBrz5bosv3pLFUDmtd0xT",
+    //     "host": "us-mqtt-22a98aeb8c69.kii.com",
+    //     "portTCP": 1883,
+    //     "portSSL": 8883,
+    //     "ttl": 2147483647
+    // }
+    var kiiContext = null;
 
     function KiiOnboardingThing(config) {
         RED.nodes.createNode(this, config);
@@ -75,6 +97,7 @@ module.exports = function(RED) {
                             msg.accessToken = json.accessToken;
                             msg.mqttEndpoint = json.mqttEndpoint;
                             fs.writeFile(filename, JSON.stringify(msg));
+                            kiiContext = msg;
                             node.send(msg);
                         });
                     });
@@ -82,48 +105,28 @@ module.exports = function(RED) {
                     request.end();
                 } else {
                     var json = JSON.parse(data);
+                    kiiContext = json;
                     node.send(json);
                 }
             });
         });
     }
     RED.nodes.registerType("kii-onboarding-thing", KiiOnboardingThing);
-    // "topic": "",
-    // "payload": 1448935794216,
-    // "_msgid": "8f392a58.70c6d8",
-    // "site": "us",
-    // "appID": "5b8d7fc2",
-    // "appKey": "c6a72bcd9836399f943d3798c7f3719f",
-    // "vendorThingID": "1234-5678-abc-dei1",
-    // "thingPassword": "password",
-    // "thingType": "",
-    // "thingID": "th.bb149fa00022-d4ca-5e11-bc79-02dcef5f",
-    // "accessToken": "QDendRpcdhrm1aI62tOa1x66wLRjlrNxWDBtvToTbR4",
-    // "mqttEndpoint": {
-    //     "installationID": "v95ztbzvpfg0curba58pq6is8",
-    //     "username": "5b8d7fc2-NUjCgvNQE2vPLqwkcfm2Ghx",
-    //     "password": "RBEoyoINKyWeoJTTrrTtcyiINBVkMlVWrLVBHxKhQjgcgjJzeNcFuaCfxFIoaJRP",
-    //     "mqttTopic": "hJrBrz5bosv3pLFUDmtd0xT",
-    //     "host": "us-mqtt-22a98aeb8c69.kii.com",
-    //     "portTCP": 1883,
-    //     "portSSL": 8883,
-    //     "ttl": 2147483647
-    // }
     function KiiMqttReceiver(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         var client = null;
         this.on("input", function(msg) {
             var options = {
-                port: msg.mqttEndpoint.portTCP,
-                clientId: msg.mqttEndpoint.mqttTopic,
-                username: msg.mqttEndpoint.username,
-                password: msg.mqttEndpoint.password
+                port: kiiContext.mqttEndpoint.portTCP,
+                clientId: kiiContext.mqttEndpoint.mqttTopic,
+                username: kiiContext.mqttEndpoint.username,
+                password: kiiContext.mqttEndpoint.password
             };
-            client = mqtt.connect("tcp://" + msg.mqttEndpoint.host, options);
+            client = mqtt.connect("tcp://" + kiiContext.mqttEndpoint.host, options);
             client.on('connect', function () {
                 node.log("##### mqtt connected!!");
-                client.subscribe(msg.mqttEndpoint.mqttTopic);
+                client.subscribe(kiiContext.mqttEndpoint.mqttTopic);
             });
             client.on('message', function (topic, message) {
                 node.log("##### received message!! msg=" + message);
