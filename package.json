@@ -1,0 +1,14 @@
+{
+    "name"         : "node-red-kii",
+    "version"      : "0.0.1",
+    "description"  : "node-red nodes for KiiCloud",
+    "dependencies": {
+        "mqtt": "*"
+    },
+    "keywords": [ "node-red" ],
+    "node-red"     : {
+        "nodes": {
+            "kii-onboarding-thing": "kii/node-red-node-kii.js"
+        }
+    }
+}
