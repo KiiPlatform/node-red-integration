@@ -24,6 +24,7 @@ module.exports = function(RED) {
     //     "portSSL": 8883,
     //     "ttl": 2147483647
     // }
+
     var kiiContext = null;
 
     function KiiOnboardingThing(config) {
@@ -72,6 +73,7 @@ module.exports = function(RED) {
                         "vendorThingID": msg.vendorThingID,
                         "thingPassword": msg.thingPassword
                     });
+                    msg.host = host;
                     var options = {
                         hostname: host,
                         port: 443,
@@ -101,6 +103,9 @@ module.exports = function(RED) {
                             node.send(msg);
                         });
                     });
+                    request.on('error', function(e) {
+                        node.error("Failed to onboard", e.message);
+                    });
                     request.write(postdata);
                     request.end();
                 } else {
@@ -112,6 +117,8 @@ module.exports = function(RED) {
         });
     }
     RED.nodes.registerType("kii-onboarding-thing", KiiOnboardingThing);
+
+
     function KiiMqttReceiver(config) {
         RED.nodes.createNode(this, config);
         var node = this;
@@ -135,5 +142,41 @@ module.exports = function(RED) {
         });
     }
     RED.nodes.registerType("kii-mqtt-receiver", KiiMqttReceiver);
+
+
+    function KiiStateUploader(config) {
+        RED.nodes.createNode(this, config);
+        var node = this;
+        this.on("input", function(msg) {
+
+            var putdata = JSON.stringify(msg.payload);
+            var options = {
+                hostname: kiiContext.host,
+                port: 443,
+                path: "/thing-if/apps/" + kiiContext.appID + "/targets/" + kiiContext.thingID + "/states",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Content-Length": Buffer.byteLength(putdata),
+                    "X-Kii-AppID": kiiContext.appID,
+                    "X-Kii-AppKey": kiiContext.appKey,
+                    "Authorization": "Basic " + kiiContext.accessToken
+                }
+            };
+            var request = http.request(options, function(response) {
+                response.on('data', function (chunk) {
+                });
+                response.on('end',function() {
+                    node.log("##### Status is updated!!  " + putdata);
+                });
+            });
+            request.on('error', function(e) {
+                node.error("Failed to update status", e.message);
+            });
+            request.write(putdata);
+            request.end();
+        });
+    }
+    RED.nodes.registerType("kii-state-uploader", KiiStateUploader);
 }
 
