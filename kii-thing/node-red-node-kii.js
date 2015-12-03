@@ -27,6 +27,37 @@ module.exports = function(RED) {
 
     var kiiContext = null;
 
+    // shared functions
+    function updateState(node, stateObject) {
+      var putdata = JSON.stringify(stateObject);
+      var options = {
+          hostname: kiiContext.host,
+          port: 443,
+          path: "/thing-if/apps/" + kiiContext.appID + "/targets/" + kiiContext.thingID + "/states",
+          method: "PUT",
+          headers: {
+              "Content-Type": "application/json",
+              "Content-Length": Buffer.byteLength(putdata),
+              "X-Kii-AppID": kiiContext.appID,
+              "X-Kii-AppKey": kiiContext.appKey,
+              "Authorization": "Basic " + kiiContext.accessToken
+          }
+      };
+      var request = http.request(options, function(response) {
+          response.on('data', function (chunk) {
+          });
+          response.on('end',function() {
+              node.log("##### Status is updated!!  " + putdata);
+          });
+      });
+      request.on('error', function(e) {
+          node.error("Failed to update status", e.message);
+      });
+      request.write(putdata);
+      request.end();
+    }
+
+
     function KiiOnboardingThing(config) {
         RED.nodes.createNode(this, config);
         this.site = config.site;
@@ -119,7 +150,7 @@ module.exports = function(RED) {
     RED.nodes.registerType("kii-onboarding-thing", KiiOnboardingThing);
 
 
-    function KiiMqttReceiver(config) {
+    function KiiCommandReceiver(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         var client = null;
@@ -140,45 +171,26 @@ module.exports = function(RED) {
             });
             client.on('message', function (topic, message) {
                 node.log("##### received message!! msg=" + message);
-                node.send(JSON.parse(message));
+                // handle command by assign actions to msg.payload
+                var msg = JSON.parse(message);
+                msg.payload= {
+                  actions: msg.actions
+                };
+                delete msg.actions;
+                node.send(msg);
             });
         });
     }
-    RED.nodes.registerType("kii-mqtt-receiver", KiiMqttReceiver);
+    RED.nodes.registerType("kii-command-receiver", KiiCommandReceiver);
 
     function KiiStateUploader(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         this.on("input", function(msg) {
-
-            var putdata = JSON.stringify(msg.payload);
-            var options = {
-                hostname: kiiContext.host,
-                port: 443,
-                path: "/thing-if/apps/" + kiiContext.appID + "/targets/" + kiiContext.thingID + "/states",
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Content-Length": Buffer.byteLength(putdata),
-                    "X-Kii-AppID": kiiContext.appID,
-                    "X-Kii-AppKey": kiiContext.appKey,
-                    "Authorization": "Basic " + kiiContext.accessToken
-                }
-            };
-            var request = http.request(options, function(response) {
-                response.on('data', function (chunk) {
-                });
-                response.on('end',function() {
-                    node.log("##### Status is updated!!  " + putdata);
-                });
-            });
-            request.on('error', function(e) {
-                node.error("Failed to update status", e.message);
-            });
-            request.write(putdata);
-            request.end();
+          updateState(node, msg.payload);
         });
     }
+
     RED.nodes.registerType("kii-state-uploader", KiiStateUploader);
 
 
@@ -209,6 +221,11 @@ module.exports = function(RED) {
                 });
                 response.on('end',function() {
                     node.log("##### Command result is updated!!  " + putdata);
+                    // if there is state data on msg.payload, then update state
+                    var stateData = msg.thingState;
+                    if (stateData != null || stateData != undefined) {
+                      updateState(node, stateData);
+                    }
                 });
             });
             request.on('error', function(e) {

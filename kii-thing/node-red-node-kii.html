@@ -55,10 +55,10 @@
     <p>Kii Onboarding Thing</p>
 </script>
 <!-- ************************************************** -->
-<!-- **************** kii-mqtt-receiver *************** -->
+<!-- **************** kii-command-receiver *************** -->
 <!-- ************************************************** -->
 <script type="text/javascript">
-    RED.nodes.registerType('kii-mqtt-receiver',{
+    RED.nodes.registerType('kii-command-receiver',{
         category: 'function',
         color: '#f69627',
         defaults: {
@@ -67,13 +67,13 @@
         outputs:1,
         icon: "red-node-kii.png",
         label: function() {
-            return "kii-mqtt-receiver";
+            return "kii-command-receiver";
         }
     });
 </script>
-<script type="text/x-red" data-template-name="kii-mqtt-receiver">
+<script type="text/x-red" data-template-name="kii-command-receiver">
 </script>
-<script type="text/x-red" data-help-name="kii-mqtt-receiver">
+<script type="text/x-red" data-help-name="kii-command-receiver">
     <p>Kii MQTT Receiver</p>
 </script>
 <!-- ************************************************** -->
@@ -120,4 +120,3 @@
 <script type="text/x-red" data-help-name="kii-action-result-sender">
     <p>Kii Action Result Sender</p>
 </script>
-
