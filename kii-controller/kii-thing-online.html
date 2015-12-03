@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Kii Thing Online',{
+        category: 'KiiControl',
+        color: '#f2841e',
+        defaults: {
+            kiiThing: {value:"", required: true, type: 'kii-thing'}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "white-globe.png",
+        label: function() {
+            return "Kii Thing Online";
+        }
+    });
+</script>
+<script type="text/x-red" data-template-name="Kii Thing Online">
+    <div class="form-row">
+        <label for="node-input-kiiThing"><i class="fa fa-gear"></i> Kii Thing</label>
+        <input id="node-input-kiiThing">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="Kii Thing Online">
+    <p>A node that checks the online status of a thing.</p>
+</script>

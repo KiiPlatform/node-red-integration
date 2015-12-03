@@ -1,0 +1,28 @@
+<script type="text/javascript">
+  RED.nodes.registerType('kii-thing',{
+    category: 'config',
+    defaults: {
+      displayName: {value: "Kii Thing", required: true},
+      vendorThingID: {value:"",required:true},
+      password: {value:"",required:true}
+    },
+    label: function() {
+      return this.displayName || this.vendorThingID;
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="kii-thing">
+  <div class="form-row">
+    <label for="node-config-input-displayName"><i class="icon-tag"></i> Display Name</label>
+    <input type="text" id="node-config-input-displayName">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-vendorThingID"><i class="fa fa-pencil-square-o"></i> VendorThingID</label>
+    <input type="text" id="node-config-input-vendorThingID" placeholder="Input the Vendor Thing ID here">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
+    <input type="password" id="node-config-input-password" placeholder="Input your Password here">
+  </div>
+</script>

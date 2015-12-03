@@ -1,0 +1,81 @@
+<script type="text/x-red" data-template-name="Kii Trigger">
+    <div class="form-row">
+        <label for="node-input-title"><i class="fa fa-tag"></i> Title</label>
+        <input type="text" id="node-input-title" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-description"><i class="fa fa-file-text"></i> Description</label>
+        <input type="text" id="node-input-description" placeholder="Description">
+    </div>
+    <div class="form-row">
+        <label for="node-input-kiiThingSource"><i class="fa fa-gear"></i> Source</label>
+        <input id="node-input-kiiThingSource">
+    </div>
+    <div class="form-row" type="hidden" style="margin-bottom: 0px;">
+        <label type="hidden" for="node-input-condition"> <i class="fa fa-code"></i> Condition</label>
+        <input type="hidden" id="node-input-condition" autofocus="autofocus">
+    </div>
+    <div class="form-row node-text-editor-row">
+        <div style="height: 150px;" class="node-text-editor" id="node-input-condition-editor" ></div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-kiiThingTarget"><i class="fa fa-gear"></i> Target</label>
+        <input id="node-input-kiiThingTarget">
+    </div>
+    <div class="form-row" type="hidden" style="margin-bottom: 0px;">
+        <label type="hidden" for="node-input-template"> <i class="fa fa-code"></i> Actions</label>
+        <input type="hidden" id="node-input-template" autofocus="autofocus">
+    </div>
+    <div class="form-row node-text-editor-row">
+        <div style="height: 150px;" class="node-text-editor" id="node-input-command-editor" ></div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="Kii Trigger">
+    <p>This node sends a command to a thing.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('Kii Trigger',{
+        color:"#f2841e",
+        category: 'KiiControl',
+        defaults: {
+            title: {value:"", required: true},
+            description: {value:"", required: true},
+            kiiThingSource: {value:"", required: true, type: 'kii-thing'},
+            template: {value: JSON.stringify([{"turnPower": {power: true}}]), required: true},            
+            kiiThingTarget: {value:"", required: true, type: 'kii-thing'},
+            condition : {value: JSON.stringify({
+                "type": "range",
+                "field": "brightness",
+                "upperLimit": 500,
+                "upperIncluded": false
+            }), require: true}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "kii-trigger.png",
+        label: function() {
+            return this.title || "Kii Trigger";
+        },
+        oneditprepare: function() {
+            var that = this;
+            this.editor = RED.editor.createEditor({
+                id: 'node-input-command-editor',
+                mode: 'ace/mode/json',
+                value: $("#node-input-template").val()
+            });
+            this.editor2 = RED.editor.createEditor({
+                id: 'node-input-condition-editor',
+                mode: 'ace/mode/json',
+                value: $("#node-input-condition").val()
+            });
+        },
+        oneditsave: function() {
+            $("#node-input-template").val(this.editor.getValue())
+            delete this.editor;
+            $("#node-input-condition").val(this.editor2.getValue())
+            delete this.editor2;
+        }
+    });
+</script>

@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Kii Ownership',{
+        category: 'KiiControl',
+        color: '#f2841e',
+        defaults: {
+            kiiThing: {value:"", required: true, type: 'kii-thing'}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "kii-ownership.png",
+        label: function() {
+            return "Kii Ownership";
+        }
+    });
+</script>
+<script type="text/x-red" data-template-name="Kii Ownership">
+    <div class="form-row">
+        <label for="node-input-kiiThing"><i class="fa fa-gear"></i> Kii Thing</label>
+        <input id="node-input-kiiThing">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="kii-thing-onboard">
+    <p>A node that onboards a Thing to Kii Cloud with the given appID.</p>
+</script>

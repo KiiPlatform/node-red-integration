@@ -1,0 +1,38 @@
+<script type="text/javascript">
+  RED.nodes.registerType('kii-app',{
+    category: 'config',
+    defaults: {
+      appName: {value: "Kii App", required: true},
+      appID: {value:"",required:true},
+      appKey: {value:"",required:true},
+      appSite: {value: "", require: true}
+    },
+    label: function() {
+      return this.name || this.appID;
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="kii-app">
+  <div class="form-row">
+    <label for="node-config-input-appName"><i class="icon-tag"></i> App Name</label>
+    <input type="text" id="node-config-input-appName">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-appID"><i class="fa fa-pencil-square-o"></i> App ID</label>
+    <input type="text" id="node-config-input-appID" placeholder="Input your Kii App ID here">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-appKey"><i class="fa fa-lock"></i> App Key</label>
+    <input type="text" id="node-config-input-appKey" placeholder="Input your Kii App Key here">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-appSite"><i class="fa fa-globe"></i> App Site</label>
+    <select type="text" id="node-config-input-appSite" style=" font-size: 0.8em; margin-bottom: 3px; width:110px">
+      <option value="https://api-cn3.kii.com/api">CN</option>
+      <option value="https://api-jp.kii.com/api">JP</option>
+      <option value="https://api.kii.com/api">US</option>
+      <option value="https://api-sg.kii.com/api">SG</option>
+    </select>
+  </div>
+</script>
