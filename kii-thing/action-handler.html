@@ -1,9 +1,9 @@
 <!-- ************************************************** -->
-<!-- ************** kii-action-handler ************** -->
+<!-- ************** Kii Action Handler ************** -->
 <!-- ************************************************** -->
 <script type="text/javascript">
-    RED.nodes.registerType('kii-action-handler',{
-        category: 'KiiCloud',
+    RED.nodes.registerType('Kii Action Handler',{
+        category: 'kiiThing',
         color: '#f69627',
         defaults: {
             action: {value:"",required:true},
@@ -13,12 +13,12 @@
         outputs:2,
         icon: "red-node-local-thing.png",
         label: function() {
-            return this.name || "kii-action-handler";
+            return this.name || "Kii Action Handler";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="kii-action-handler">
+<script type="text/x-red" data-template-name="Kii Action Handler">
     <div class="form-row">
         <label for="node-input-action">Action</label>
         <input type="text" id="node-input-action">
@@ -29,6 +29,6 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="kii-action-handler">
+<script type="text/x-red" data-help-name="Kii Action Handler">
     <p>Kii Action Handler</p>
 </script>

@@ -44,11 +44,11 @@ module.exports = function(RED) {
             }
           }
           // there is no action matched
-          node.log("no action matched in kii-action-handler");
+          node.log("no action matched in Kii Action Handler");
           node.send([null,{}]);
 
         });
     }
-    RED.nodes.registerType("kii-action-handler", ActionHandler);
+    RED.nodes.registerType("Kii Action Handler", ActionHandler);
 
 }

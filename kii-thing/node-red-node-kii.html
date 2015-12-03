@@ -1,9 +1,9 @@
 <!-- ************************************************** -->
-<!-- ************** kii-onboarding-thing ************** -->
+<!-- ************** Kii Onboard Thing ************** -->
 <!-- ************************************************** -->
 <script type="text/javascript">
-    RED.nodes.registerType('kii-onboarding-thing',{
-        category: 'KiiCloud',
+    RED.nodes.registerType('Kii Onboard Thing',{
+        category: 'kiiThing',
         color: '#f69627',
         defaults: {
             site:            {value:"us",required:true},
@@ -18,12 +18,12 @@
         outputs:1,
         icon: "red-node-kii.png",
         label: function() {
-            return "kii-onboarding-thing";
+            return "Kii Onboard Thing";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="kii-onboarding-thing">
+<script type="text/x-red" data-template-name="Kii Onboard Thing">
     <div class="form-row">
         <label for="node-input-site">Site</label>
         <input type="text" id="node-input-site">
@@ -51,15 +51,15 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="kii-onboarding-thing">
+<script type="text/x-red" data-help-name="Kii Onboard Thing">
     <p>Kii Onboarding Thing</p>
 </script>
 <!-- ************************************************** -->
-<!-- **************** kii-command-receiver *************** -->
+<!-- **************** Kii Command Receiver *************** -->
 <!-- ************************************************** -->
 <script type="text/javascript">
-    RED.nodes.registerType('kii-command-receiver',{
-        category: 'KiiCloud',
+    RED.nodes.registerType('Kii Command Receiver',{
+        category: 'kiiThing',
         color: '#f69627',
         defaults: {
         },
@@ -67,21 +67,21 @@
         outputs:1,
         icon: "red-node-kii.png",
         label: function() {
-            return "kii-command-receiver";
+            return "Kii Command Receiver";
         }
     });
 </script>
-<script type="text/x-red" data-template-name="kii-command-receiver">
+<script type="text/x-red" data-template-name="Kii Command Receiver">
 </script>
-<script type="text/x-red" data-help-name="kii-command-receiver">
+<script type="text/x-red" data-help-name="Kii Command Receiver">
     <p>Kii MQTT Receiver</p>
 </script>
 <!-- ************************************************** -->
-<!-- **************** kii-state-uploader ************** -->
+<!-- **************** Kii State Uploader ************** -->
 <!-- ************************************************** -->
 <script type="text/javascript">
-    RED.nodes.registerType('kii-state-uploader',{
-        category: 'KiiCloud',
+    RED.nodes.registerType('Kii State Uploader',{
+        category: 'kiiThing',
         color: '#f69627',
         defaults: {
         },
@@ -89,21 +89,21 @@
         outputs:1,
         icon: "red-node-kii.png",
         label: function() {
-            return "kii-state-uploader";
+            return "Kii State Uploader";
         }
     });
 </script>
-<script type="text/x-red" data-template-name="kii-state-uploader">
+<script type="text/x-red" data-template-name="Kii State Uploader">
 </script>
-<script type="text/x-red" data-help-name="kii-state-uploader">
+<script type="text/x-red" data-help-name="Kii State Uploader">
     <p>Kii State Uploader</p>
 </script>
 <!-- ************************************************** -->
-<!-- ************* kii-action-result-sender *********** -->
+<!-- ************* Kii ActionResults Sender *********** -->
 <!-- ************************************************** -->
 <script type="text/javascript">
-    RED.nodes.registerType('kii-action-result-sender',{
-        category: 'KiiCloud',
+    RED.nodes.registerType('Kii ActionResults Sender',{
+        category: 'kiiThing',
         color: '#f69627',
         defaults: {
         },
@@ -111,12 +111,12 @@
         outputs:1,
         icon: "red-node-kii.png",
         label: function() {
-            return "kii-action-result-sender";
+            return "Kii ActionResults Sender";
         }
     });
 </script>
-<script type="text/x-red" data-template-name="kii-action-result-sender">
+<script type="text/x-red" data-template-name="Kii ActionResults Sender">
 </script>
-<script type="text/x-red" data-help-name="kii-action-result-sender">
+<script type="text/x-red" data-help-name="Kii ActionResults Sender">
     <p>Kii Action Result Sender</p>
 </script>
