@@ -3,16 +3,17 @@
 <!-- ************************************************** -->
 <script type="text/javascript">
     RED.nodes.registerType('kii-action-handler',{
-        category: 'kii-thing',
+        category: 'kiiThing',
         color: '#f69627',
         defaults: {
             action: {value:"",required:true},
+            name: {value:""}
         },
         inputs:1,
         outputs:2,
         icon: "red-node-kii.png",
         label: function() {
-            return "kii-action-handler";
+            return this.name || "kii-action-handler";
         }
     });
 </script>
@@ -21,6 +22,10 @@
     <div class="form-row">
         <label for="node-input-action">Action</label>
         <input type="text" id="node-input-action">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
     </div>
 </script>
 
