@@ -1,0 +1,51 @@
+<script type="text/x-red" data-template-name="kii-starter">
+<div class="form-row">
+    <label for="node-input-kiiApp"><i class="fa fa-th-large"></i> KiiApp</label>
+    <input id="node-input-kiiApp">
+</div>
+    
+</script>
+<script type="text/x-red" data-help-name="kii-starter">
+    <p>This node starts a Kii App.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('kii-starter',{
+        category: 'KiiControl',
+        color:"#f2841e",
+        defaults: {
+            kiiApp: {value:"", type:"kii-app"}
+        },
+        inputs:0,
+        outputs:1,
+        icon: "kii-app.png",
+        label: function() {
+            return this.name||"Kii App"
+        },
+        button: {
+            onclick: function() {
+                var label = this.name || "Kii App";
+                var node = this;
+                $.ajax({
+                    url: "inject/"+this.id,
+                    type:"POST",
+                    success: function(resp) {
+                        RED.notify(node._("Kii App",{label:label}),"started");
+                    },
+                    error: function(jqXHR,textStatus,errorThrown) {
+                        if (jqXHR.status == 404) {
+                            RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.not-deployed")}),"error");
+                        } else if (jqXHR.status == 500) {
+                            RED.notify(node._("common.notification.error",{message:node._("inject.errors.failed")}),"error");
+                        } else if (jqXHR.status == 0) {
+                            RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.no-response")}),"error");
+                        } else {
+                            RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.unexpected",{status:jqXHR.status,message:textStatus})}),"error");
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+</script>

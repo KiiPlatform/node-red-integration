@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Kii Thing Get',{
+        category: 'KiiControl',
+        color: '#f2841e',
+        defaults: {
+            kiiThing: {value:"", required: true, type: 'kii-thing'}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "white-globe.png",
+        label: function() {
+            return "Kii Thing Get";
+        }
+    });
+</script>
+<script type="text/x-red" data-template-name="Kii Thing Get">
+    <div class="form-row">
+        <label for="node-input-kiiThing"><i class="fa fa-gear"></i> Kii Thing</label>
+        <input id="node-input-kiiThing">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="Kii Thing Get">
+    <p>A node that get the attributes of a thing.</p>
+</script>

@@ -1,0 +1,23 @@
+<script type="text/javascript">
+  RED.nodes.registerType('kii-site',{
+    category: 'config',
+    defaults: {
+      siteName: {value: "JP", required: true},
+      apiURL: {value:"https://api-jp.kii.com/api",required:true}
+    },
+    label: function() {
+      return this.name || this.apiURL;
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="kii-site">
+  <div class="form-row">
+    <label for="node-config-input-siteName"><i class="icon-tag"></i> Site Name</label>
+    <input type="text" id="node-config-input-siteName">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-apiURL"><i class="fa fa-code"></i> API URL</label>
+    <input type="text" id="node-config-input-apiURL">
+  </div>
+</script>
