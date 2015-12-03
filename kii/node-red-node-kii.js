@@ -131,9 +131,12 @@ module.exports = function(RED) {
                 password: kiiContext.mqttEndpoint.password
             };
             client = mqtt.connect("tcp://" + kiiContext.mqttEndpoint.host, options);
-            client.on('connect', function () {
-                node.log("##### mqtt connected!!");
-                client.subscribe(kiiContext.mqttEndpoint.mqttTopic);
+            client.on('connect', function (packet) {
+                if (!packet.sessionPresent) {
+                    node.log("##### mqtt connected!!");
+                    client.subscribe(kiiContext.mqttEndpoint.mqttTopic);
+                    node.log("##### mqtt subscribed " + kiiContext.mqttEndpoint.mqttTopic);
+                }
             });
             client.on('message', function (topic, message) {
                 node.log("##### received message!! msg=" + message);
