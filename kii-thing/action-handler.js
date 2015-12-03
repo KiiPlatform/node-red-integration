@@ -13,7 +13,7 @@ module.exports = function(RED) {
           var expectedActionName = config.action;
           if (actions == null || actions == undefined) {
             node.err("Not contain actions in payload");
-            node.send([{},{}]);
+            node.send([null,{}]);
             return;
           }
           for(var i in actions) {
@@ -31,6 +31,7 @@ module.exports = function(RED) {
                 result: changeValue
               };
               var msg1 = {
+                commandID: msg.commandID,
                 payload: msg1_payload
               };
 
@@ -44,11 +45,10 @@ module.exports = function(RED) {
           }
           // there is no action matched
           node.log("no action matched in kii-action-handler");
-          node.send([{},{}]);
+          node.send([null,{}]);
 
         });
     }
     RED.nodes.registerType("kii-action-handler", ActionHandler);
-
 
 }

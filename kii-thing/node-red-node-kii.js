@@ -183,7 +183,10 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var node = this;
         this.on("input", function(msg) {
-
+            if (msg == null || msg == undefined) {
+              node.log("msg is null, nothing to send");
+              return;
+            }
             var putdata = JSON.stringify(msg.payload);
             var options = {
                 hostname: kiiContext.host,
