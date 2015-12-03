@@ -1,0 +1,34 @@
+<!-- ************************************************** -->
+<!-- ************** kii-action-handler ************** -->
+<!-- ************************************************** -->
+<script type="text/javascript">
+    RED.nodes.registerType('kii-action-handler',{
+        category: 'kiiThing',
+        color: '#f69627',
+        defaults: {
+            action: {value:"",required:true},
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:2,
+        icon: "red-node-local-thing.png",
+        label: function() {
+            return this.name || "kii-action-handler";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="kii-action-handler">
+    <div class="form-row">
+        <label for="node-input-action">Action</label>
+        <input type="text" id="node-input-action">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="kii-action-handler">
+    <p>Kii Action Handler</p>
+</script>
