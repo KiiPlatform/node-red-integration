@@ -147,7 +147,7 @@ module.exports = function(RED) {
             });
         });
     }
-    RED.nodes.registerType("kii-onboarding-thing", KiiOnboardingThing);
+    RED.nodes.registerType("Kii Onboard Thing", KiiOnboardingThing);
 
 
     function KiiCommandReceiver(config) {
@@ -181,7 +181,7 @@ module.exports = function(RED) {
             });
         });
     }
-    RED.nodes.registerType("kii-command-receiver", KiiCommandReceiver);
+    RED.nodes.registerType("Kii Command Receiver", KiiCommandReceiver);
 
     function KiiStateUploader(config) {
         RED.nodes.createNode(this, config);
@@ -191,7 +191,7 @@ module.exports = function(RED) {
         });
     }
 
-    RED.nodes.registerType("kii-state-uploader", KiiStateUploader);
+    RED.nodes.registerType("Kii State Uploader", KiiStateUploader);
 
 
     function ActionResultSender(config) {
@@ -235,5 +235,5 @@ module.exports = function(RED) {
             request.end();
         });
     }
-    RED.nodes.registerType("kii-action-result-sender", ActionResultSender);
+    RED.nodes.registerType("Kii ActionResults Sender", ActionResultSender);
 }
