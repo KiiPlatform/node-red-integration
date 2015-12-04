@@ -55,8 +55,6 @@ module.exports = function(RED) {
       request.write(putdata);
       request.end();
     }
-
-
     function KiiOnboardingThing(config) {
         RED.nodes.createNode(this, config);
         this.site = config.site;
@@ -134,9 +132,6 @@ module.exports = function(RED) {
             });
             request.write(postdata);
             request.end();
-
-
-
         });
     }
     RED.nodes.registerType("Kii Onboard Thing", KiiOnboardingThing);
@@ -153,6 +148,10 @@ module.exports = function(RED) {
                 username: kiiContext.mqttEndpoint.username,
                 password: kiiContext.mqttEndpoint.password
             };
+            if (client != null) {
+                node.log("##### close connection");
+                client.end();
+            }
             client = mqtt.connect("tcp://" + kiiContext.mqttEndpoint.host, options);
             client.on('connect', function (packet) {
                 if (!packet.sessionPresent) {
