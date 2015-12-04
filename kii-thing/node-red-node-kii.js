@@ -1,7 +1,6 @@
 module.exports = function(RED) {
 
     var http = require("https");
-    var fs = require("fs");
     var mqtt = require("mqtt");
     // "topic": "",
     // "payload": 1448935794216,
@@ -86,65 +85,58 @@ module.exports = function(RED) {
             if (!msg.thingType) {
                 msg.thingType = node.thingType;
             }
-            var filename = "kii-" + msg.vendorThingID + ".json";
-            fs.readFile(filename, {encoding: "utf-8"}, function (err, data) {
-                if (err) {
-                    // file doesn't exist
-                    var host = "";
-                    if (msg.site == "us") {
-                        host = "api.kii.com";
-                    } else if (msg.site == "jp") {
-                        host = "api-jp.kii.com";
-                    } else if (msg.site == "cn") {
-                        host = "api-cn3.kii.com";
-                    } else if (msg.site == "sg") {
-                        host = "api-sg.kii.com";
-                    }
-                    var postdata = JSON.stringify({
-                        "vendorThingID": msg.vendorThingID,
-                        "thingPassword": msg.thingPassword
-                    });
-                    msg.host = host;
-                    var options = {
-                        hostname: host,
-                        port: 443,
-                        path: "/thing-if/apps/" + msg.appID + "/onboardings",
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/vnd.kii.OnboardingWithVendorThingIDByThing+json",
-                            "Content-Length": Buffer.byteLength(postdata),
-                            "X-Kii-AppID": msg.appID,
-                            "X-Kii-AppKey": msg.appKey,
-                            "Authorization": "Basic " + new Buffer(msg.appID + ":" + msg.appKey).toString("base64")
-                        }
-                    };
-                    var responseBody = "";
-                    var request = http.request(options, function(response) {
-                        response.on('data', function (chunk) {
-                            responseBody += chunk;
-                        });
-                        response.on('end',function() {
-                            node.log("##### onboarded res=" + responseBody);
-                            var json = JSON.parse(responseBody);
-                            msg.thingID = json.thingID;
-                            msg.accessToken = json.accessToken;
-                            msg.mqttEndpoint = json.mqttEndpoint;
-                            fs.writeFile(filename, JSON.stringify(msg));
-                            kiiContext = msg;
-                            node.send(msg);
-                        });
-                    });
-                    request.on('error', function(e) {
-                        node.error("Failed to onboard", e.message);
-                    });
-                    request.write(postdata);
-                    request.end();
-                } else {
-                    var json = JSON.parse(data);
-                    kiiContext = json;
-                    node.send(json);
-                }
+
+            var host = "";
+            if (msg.site == "us") {
+                host = "api.kii.com";
+            } else if (msg.site == "jp") {
+                host = "api-jp.kii.com";
+            } else if (msg.site == "cn") {
+                host = "api-cn3.kii.com";
+            } else if (msg.site == "sg") {
+                host = "api-sg.kii.com";
+            }
+            var postdata = JSON.stringify({
+                "vendorThingID": msg.vendorThingID,
+                "thingPassword": msg.thingPassword
             });
+            msg.host = host;
+            var options = {
+                hostname: host,
+                port: 443,
+                path: "/thing-if/apps/" + msg.appID + "/onboardings",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/vnd.kii.OnboardingWithVendorThingIDByThing+json",
+                    "Content-Length": Buffer.byteLength(postdata),
+                    "X-Kii-AppID": msg.appID,
+                    "X-Kii-AppKey": msg.appKey,
+                    "Authorization": "Basic " + new Buffer(msg.appID + ":" + msg.appKey).toString("base64")
+                }
+            };
+            var responseBody = "";
+            var request = http.request(options, function(response) {
+                response.on('data', function (chunk) {
+                    responseBody += chunk;
+                });
+                response.on('end',function() {
+                    node.log("##### onboarded res=" + responseBody);
+                    var json = JSON.parse(responseBody);
+                    msg.thingID = json.thingID;
+                    msg.accessToken = json.accessToken;
+                    msg.mqttEndpoint = json.mqttEndpoint;
+                    kiiContext = msg;
+                    node.send(msg);
+                });
+            });
+            request.on('error', function(e) {
+                node.error("Failed to onboard", e.message);
+            });
+            request.write(postdata);
+            request.end();
+
+
+
         });
     }
     RED.nodes.registerType("Kii Onboard Thing", KiiOnboardingThing);
