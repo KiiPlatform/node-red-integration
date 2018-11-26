@@ -32,14 +32,14 @@ module.exports = function(RED) {
       var options = {
           hostname: kiiContext.host,
           port: 443,
-          path: "/thing-if/apps/" + kiiContext.appID + "/targets/" + kiiContext.thingID + "/states",
+          path: "/thing-if/apps/" + kiiContext.appID + "/targets/thing:" + kiiContext.thingID + "/states",
           method: "PUT",
           headers: {
               "Content-Type": "application/json",
               "Content-Length": Buffer.byteLength(putdata),
               "X-Kii-AppID": kiiContext.appID,
               "X-Kii-AppKey": kiiContext.appKey,
-              "Authorization": "Basic " + kiiContext.accessToken
+              "Authorization": "Bearer " + kiiContext.accessToken
           }
       };
       var request = http.request(options, function(response) {
@@ -197,7 +197,7 @@ module.exports = function(RED) {
             var options = {
                 hostname: kiiContext.host,
                 port: 443,
-                path: "/thing-if/apps/" + kiiContext.appID + "/targets/" + kiiContext.thingID + "/commands/" + msg.commandID + "/action-results",
+                path: "/thing-if/apps/" + kiiContext.appID + "/targets/thing:" + kiiContext.thingID + "/commands/" + msg.commandID + "/action-results",
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
